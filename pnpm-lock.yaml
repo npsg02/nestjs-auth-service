@@ -43,7 +43,7 @@ importers:
         version: 2.1.0(@nestjs/common@9.4.2(cache-manager@5.7.6)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.2))(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)
       '@nestjs/microservices':
         specifier: 9.4.2
-        version: 9.4.2(@nestjs/common@9.4.2(cache-manager@5.7.6)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.2))(@nestjs/core@9.4.2)(@nestjs/websockets@9.4.3)(amqplib@0.10.5)(cache-manager@5.7.6)(ioredis@5.6.0)(mqtt@4.3.8)(nats@2.29.3)(reflect-metadata@0.1.13)(rxjs@7.8.2)
+        version: 9.4.2(@nestjs/common@9.4.2(cache-manager@5.7.6)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.2))(@nestjs/core@9.4.2)(@nestjs/websockets@9.4.3)(amqplib@0.10.5)(cache-manager@5.7.6)(ioredis@5.6.0)(kafkajs@2.2.4)(mqtt@4.3.8)(nats@2.29.3)(reflect-metadata@0.1.13)(rxjs@7.8.2)
       '@nestjs/passport':
         specifier: 9.0.3
         version: 9.0.3(@nestjs/common@9.4.2(cache-manager@5.7.6)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.2))(passport@0.6.0)
@@ -131,6 +131,9 @@ importers:
       ioredis:
         specifier: ^5.3.1
         version: 5.6.0
+      kafkajs:
+        specifier: ^2.2.4
+        version: 2.2.4
       lodash:
         specifier: ^4.17.20
         version: 4.17.21
@@ -3832,6 +3835,10 @@ packages:
   jws@3.2.2:
     resolution: {integrity: sha512-YHlZCB6lMTllWDtSPHz/ZXTsi8S00usEV6v1tjq8tOUZzw7DpSDWVXjXDre6ed1w/pd495ODpHZYSdkRTsa0HA==}
 
+  kafkajs@2.2.4:
+    resolution: {integrity: sha512-j/YeapB1vfPT2iOIUn/vxdyKEuhuY2PxMBvf5JWux6iSaukAccrMtXEY/Lb7OvavDhOWME589bpLrEdnVHjfjA==}
+    engines: {node: '>=14.0.0'}
+
   keycharm@0.2.0:
     resolution: {integrity: sha512-i/XBRTiLqRConPKioy2oq45vbv04e8x59b0mnsIRQM+7Ec/8BC7UcL5pnC4FMeGb8KwG7q4wOMw7CtNZf5tiIg==}
 
@@ -7138,7 +7145,7 @@ snapshots:
       tslib: 2.5.2
       uid: 2.0.2
     optionalDependencies:
-      '@nestjs/microservices': 9.4.2(@nestjs/common@9.4.2(cache-manager@5.7.6)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.2))(@nestjs/core@9.4.2)(@nestjs/websockets@9.4.3)(amqplib@0.10.5)(cache-manager@5.7.6)(ioredis@5.6.0)(mqtt@4.3.8)(nats@2.29.3)(reflect-metadata@0.1.13)(rxjs@7.8.2)
+      '@nestjs/microservices': 9.4.2(@nestjs/common@9.4.2(cache-manager@5.7.6)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.2))(@nestjs/core@9.4.2)(@nestjs/websockets@9.4.3)(amqplib@0.10.5)(cache-manager@5.7.6)(ioredis@5.6.0)(kafkajs@2.2.4)(mqtt@4.3.8)(nats@2.29.3)(reflect-metadata@0.1.13)(rxjs@7.8.2)
       '@nestjs/platform-express': 9.4.2(@nestjs/common@9.4.2(cache-manager@5.7.6)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.2))(@nestjs/core@9.4.2)
       '@nestjs/websockets': 9.4.3(@nestjs/common@9.4.2(cache-manager@5.7.6)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.2))(@nestjs/core@9.4.2)(@nestjs/platform-socket.io@9.4.3)(reflect-metadata@0.1.13)(rxjs@7.8.2)
     transitivePeerDependencies:
@@ -7194,7 +7201,7 @@ snapshots:
       class-transformer: 0.5.1
       class-validator: 0.14.0
 
-  '@nestjs/microservices@9.4.2(@nestjs/common@9.4.2(cache-manager@5.7.6)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.2))(@nestjs/core@9.4.2)(@nestjs/websockets@9.4.3)(amqplib@0.10.5)(cache-manager@5.7.6)(ioredis@5.6.0)(mqtt@4.3.8)(nats@2.29.3)(reflect-metadata@0.1.13)(rxjs@7.8.2)':
+  '@nestjs/microservices@9.4.2(@nestjs/common@9.4.2(cache-manager@5.7.6)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.2))(@nestjs/core@9.4.2)(@nestjs/websockets@9.4.3)(amqplib@0.10.5)(cache-manager@5.7.6)(ioredis@5.6.0)(kafkajs@2.2.4)(mqtt@4.3.8)(nats@2.29.3)(reflect-metadata@0.1.13)(rxjs@7.8.2)':
     dependencies:
       '@nestjs/common': 9.4.2(cache-manager@5.7.6)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.2)
       '@nestjs/core': 9.4.2(@nestjs/common@9.4.2(cache-manager@5.7.6)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.2))(@nestjs/microservices@9.4.2)(@nestjs/platform-express@9.4.2)(@nestjs/websockets@9.4.3)(reflect-metadata@0.1.13)(rxjs@7.8.2)
@@ -7207,6 +7214,7 @@ snapshots:
       amqplib: 0.10.5
       cache-manager: 5.7.6
       ioredis: 5.6.0
+      kafkajs: 2.2.4
       mqtt: 4.3.8
       nats: 2.29.3
 
@@ -7285,7 +7293,7 @@ snapshots:
       '@nestjs/core': 9.4.2(@nestjs/common@9.4.2(cache-manager@5.7.6)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.2))(@nestjs/microservices@9.4.2)(@nestjs/platform-express@9.4.2)(@nestjs/websockets@9.4.3)(reflect-metadata@0.1.13)(rxjs@7.8.2)
       tslib: 2.5.3
     optionalDependencies:
-      '@nestjs/microservices': 9.4.2(@nestjs/common@9.4.2(cache-manager@5.7.6)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.2))(@nestjs/core@9.4.2)(@nestjs/websockets@9.4.3)(amqplib@0.10.5)(cache-manager@5.7.6)(ioredis@5.6.0)(mqtt@4.3.8)(nats@2.29.3)(reflect-metadata@0.1.13)(rxjs@7.8.2)
+      '@nestjs/microservices': 9.4.2(@nestjs/common@9.4.2(cache-manager@5.7.6)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.2))(@nestjs/core@9.4.2)(@nestjs/websockets@9.4.3)(amqplib@0.10.5)(cache-manager@5.7.6)(ioredis@5.6.0)(kafkajs@2.2.4)(mqtt@4.3.8)(nats@2.29.3)(reflect-metadata@0.1.13)(rxjs@7.8.2)
       '@nestjs/platform-express': 9.4.2(@nestjs/common@9.4.2(cache-manager@5.7.6)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.2))(@nestjs/core@9.4.2)
 
   '@nestjs/websockets@9.4.3(@nestjs/common@9.4.2(cache-manager@5.7.6)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.2))(@nestjs/core@9.4.2)(@nestjs/platform-socket.io@9.4.3)(reflect-metadata@0.1.13)(rxjs@7.8.2)':
@@ -10195,6 +10203,8 @@ snapshots:
     dependencies:
       jwa: 1.4.1
       safe-buffer: 5.2.1
+
+  kafkajs@2.2.4: {}
 
   keycharm@0.2.0: {}
 
