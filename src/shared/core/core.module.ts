@@ -2,11 +2,15 @@ import { CoreControler } from './core.controller';
 import { ExceptionInterceptor } from './interceptors/exception.interceptor';
 import { TransformInterceptor } from './interceptors/transftorm.interceptor';
 import { ValidationPipe } from './pipes/validation.pipe';
+import { RabbitMqModule } from './transporter/rabbitmq/rabbitmq.module';
+// import { RabbitMqModule } from './transporter/rabbitmq/rabbitmq.module';
+import { RabbitMqService } from './transporter/rabbitmq/rabbitmq.service';
 import { Global, Module } from '@nestjs/common';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 
 @Global()
 @Module({
+  imports: [],
   providers: [
     {
       provide: APP_INTERCEPTOR,
