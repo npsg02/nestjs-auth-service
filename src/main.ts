@@ -1,3 +1,5 @@
+import tracer from './shared/core/signoz/tracer';
+import { setupPrisma } from './shared/prisma';
 import { AppModule } from '@/app.module';
 import type { NestConfig } from '@/common/configs/config.interface';
 import { HttpExceptionFilter } from '@/common/filters/HttpExceptions.filter';
@@ -6,9 +8,9 @@ import { setupSwagger } from '@/common/swagger';
 import { ConfigService } from '@nestjs/config';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { json, urlencoded } from 'express';
-import { setupPrisma } from './shared/prisma';
 
 async function bootstrap() {
+  tracer.start();
   const app = await NestFactory.create(AppModule, {
     cors: true,
   });

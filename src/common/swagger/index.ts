@@ -34,6 +34,7 @@ export async function setupSwagger(app: INestApplication) {
     .setDescription(swaggerConfig.description || 'API Documents')
     .setVersion(swaggerConfig.version || '1.0')
     .build();
+
   const document = SwaggerModule.createDocument(app, swaggerDocumentOptions);
 
   Object.values((document as OpenAPIObject).paths).forEach((path: any) => {

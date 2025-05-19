@@ -1,3 +1,12 @@
+import { LoginInput } from './dtos/inputs/LoginInput';
+import { ChangePasswordInput, ResetPasswordInput } from './dtos/inputs/reset-password.input';
+import { Token } from './entities/Token';
+import { PasswordService } from './password.service';
+import { SecurityConfig } from '@/common/configs/config.interface';
+import { User } from '@/modules/user/entities/User';
+import { UsersService } from '@/modules/user/users.service';
+import { Prisma, PrismaService, UserRole } from '@/shared/prisma';
+import { generateRandomPassword } from '@/utils/tool';
 import {
   BadRequestException,
   ConflictException,
@@ -9,18 +18,6 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-
-import { SecurityConfig } from '@/common/configs/config.interface';
-import { User } from '@/modules/user/entities/User';
-import { Prisma, PrismaService, UserRole } from '@/shared/prisma';
-import { generateRandomPassword } from '@/utils/tool';
-
-import { UsersService } from '@/modules/user/users.service';
-
-import { LoginInput } from './dtos/inputs/LoginInput';
-import { ChangePasswordInput, ResetPasswordInput } from './dtos/inputs/reset-password.input';
-import { Token } from './entities/Token';
-import { PasswordService } from './password.service';
 
 export type UserPayload = {
   userId: number;
@@ -36,7 +33,7 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly passwordService: PasswordService,
     private readonly configService: ConfigService,
-    private readonly userService: UsersService,
+    private readonly userService: UsersService
   ) {}
 
   /**
@@ -50,9 +47,9 @@ export class AuthService {
    */
   async createUser(payload: Prisma.UserCreateInput) {
     const hashedPassword = await this.passwordService.hashPassword(payload.password);
-    
+
     try {
-      this.logger.log(`New user: ${payload.email}`)
+      this.logger.log(`New user: ${payload.email}`);
       return await this.prisma.$transaction(async (tx) => {
         const user = await tx.user.create({
           data: {
@@ -206,7 +203,7 @@ export class AuthService {
       include: {
         UserRole: true,
         Provider: true,
-      }
+      },
     });
   }
 
@@ -219,7 +216,7 @@ export class AuthService {
 
   private generateAccessToken(payload: UserPayload): string {
     const p = {
-      ...payload
+      ...payload,
     };
     return this.jwtService.sign(p);
   }

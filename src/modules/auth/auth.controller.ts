@@ -1,27 +1,25 @@
-import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Response } from 'express';
-
-import { ReqUser } from '@/common/decorators/user.decorator';
-import { GoogleOauthGuard, JwtGuard } from '@/common/guards';
-import { User } from '@/shared/prisma';
-
+import { AuthService } from './auth.service';
+import { LoginRequestDto } from './dto/request/login-request.dto';
 import { LoginInput } from './dtos/inputs/LoginInput';
 import { SignupInput } from './dtos/inputs/SignupInput';
 import { Token } from './entities/Token';
-import { AuthService } from './auth.service';
+import { ReqUser } from '@/common/decorators/user.decorator';
+import { GoogleOauthGuard, JwtGuard } from '@/common/guards';
+import { User } from '@/shared/prisma';
+import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  // login
   @ApiResponse({
     type: [Token],
   })
   @Post('login')
-  async login(@Body() loginInput: LoginInput) {
+  async login(@Body() loginInput: LoginRequestDto) {
     const { accessToken, refreshToken } = await this.authService.login(loginInput);
 
     return {
@@ -55,7 +53,6 @@ export class AuthController {
   async profile(@ReqUser() user: User) {
     return user;
   }
-
 
   @Get('google')
   @UseGuards(GoogleOauthGuard)
