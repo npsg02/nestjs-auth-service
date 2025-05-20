@@ -13,6 +13,18 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - '${MONGODB_PORT:-27017}:27017'
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGODB_USER:-admin}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD:-password}
+    restart: unless-stopped
+
   redis:
     image: redis/redis-stack:latest
     restart: on-failure
@@ -44,7 +56,7 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
       KAFKA_NUM_PARTITIONS: 1
       KAFKA_DEFAULT_REPLICATION_FACTOR: 1
       KAFKA_MIN_INSYNC_REPLICAS: 1
@@ -81,7 +93,24 @@ services:
   #     - REDIS_HOST=redis
   #     - DB_HOST=postgres
   #     - DATABASE_URL=postgresql://prisma:pd8cDXMA@postgres:5432/postgres?schema=public&sslmode=prefer
+  scylla:
+    image: scylladb/scylla
+    container_name: scylla-node1
+    ports:
+      - '9042:9042' # CQL
+      - '7000:7000' # intra-node communication
+      - '7001:7001' # TLS intra-node
+      - '7199:7199' # JMX
+      - '10000:10000' # Alternator (DynamoDB API)
+    volumes:
+      - scylla-data:/var/lib/scylla
+    environment:
+      - SCYLLA_CLUSTER_NAME=my-scylla-cluster
+      - SCYLLA_DC=dc1
+      - SCYLLA_RACK=rack1
 
 volumes:
   redis-data:
   postgres-data:
+  mongodb_data:
+  scylla-data:
