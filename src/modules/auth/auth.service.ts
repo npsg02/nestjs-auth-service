@@ -1,5 +1,6 @@
-import { LoginInput } from './dtos/inputs/LoginInput';
-import { ChangePasswordInput, ResetPasswordInput } from './dtos/inputs/reset-password.input';
+import { NovuService } from '../novu/novu.service';
+import { LoginRequestDto } from './dto/request/login-request.dto';
+import { ChangePasswordInput } from './dtos/inputs/reset-password.input';
 import { Token } from './entities/Token';
 import { PasswordService } from './password.service';
 import { SecurityConfig } from '@/common/configs/config.interface';
@@ -12,7 +13,6 @@ import {
   ConflictException,
   Injectable,
   Logger,
-  LoggerService,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -20,7 +20,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 
 export type UserPayload = {
-  userId: number;
+  userId: string;
   role: string[];
 };
 
@@ -33,7 +33,8 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly passwordService: PasswordService,
     private readonly configService: ConfigService,
-    private readonly userService: UsersService
+    private readonly userService: UsersService,
+    private readonly novuService: NovuService
   ) {}
 
   /**
@@ -64,6 +65,8 @@ export class AuthService {
             roleName: 'user',
           },
         });
+
+        this.novuService.createSubscriber(user);
 
         return this.generateTokens({
           userId: user.id,
@@ -153,7 +156,7 @@ export class AuthService {
     return user;
   }
 
-  async login(loginInput: LoginInput): Promise<Token> {
+  async login(loginInput: LoginRequestDto): Promise<any> {
     const { email, password } = loginInput;
 
     const user = await this.prisma.user.findUnique({
@@ -186,7 +189,11 @@ export class AuthService {
       userId: user.id,
       role: userRole,
     };
-    return this.generateTokens(payload);
+
+    return {
+      ...this.generateTokens(payload),
+      user: user,
+    };
   }
 
   getUserRoles(
@@ -197,7 +204,7 @@ export class AuthService {
     return user.UserRole.map((role) => role.roleName);
   }
 
-  async validateUser(userId: number): Promise<any> {
+  async validateUser(userId: string): Promise<any> {
     return await this.prisma.user.findUnique({
       where: { id: userId },
       include: {
@@ -221,7 +228,7 @@ export class AuthService {
     return this.jwtService.sign(p);
   }
 
-  private generateRefreshToken(payload: { userId: number }): string {
+  private generateRefreshToken(payload: { userId: string }): string {
     const securityConfig = this.configService.get<SecurityConfig>('security');
     return this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_REFRESH_SECRET'),

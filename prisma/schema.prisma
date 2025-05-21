@@ -22,14 +22,14 @@ model AuthProvider {
 model AuthProviderUser {
   id             Int           @id @default(autoincrement())
   AuthProviderId String?
-  userId         Int?
+  userId         String?
   createAt       DateTime      @default(now())
   AuthProvider   AuthProvider? @relation(fields: [AuthProviderId], references: [providerId])
   User           User?         @relation(fields: [userId], references: [id])
 }
 
 model User {
-  id           Int                @id @default(autoincrement())
+  id           String             @id @default(dbgenerated("gen_random_uuid()"))
   email        String             @unique
   password     String
   fullName     String?
@@ -48,7 +48,7 @@ model User {
 
 model UserRole {
   id       Int    @id @default(autoincrement())
-  userId   Int
+  userId   String
   roleName String
   Role     Role   @relation(fields: [roleName], references: [name])
   User     User   @relation(fields: [userId], references: [id])

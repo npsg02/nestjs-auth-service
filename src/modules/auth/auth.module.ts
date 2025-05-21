@@ -1,3 +1,5 @@
+import { NovuModule } from '../novu/novu.module';
+import { NovuService } from '../novu/novu.service';
 import { UsersModule } from '../user/users.module';
 import { AuthController } from './auth.controller';
 import { AuthResolver } from './auth.resolver';
@@ -32,6 +34,7 @@ import { PassportModule } from '@nestjs/passport';
       },
       inject: [ConfigService],
     }),
+    NovuModule,
   ],
   providers: [
     AuthService,

@@ -16,6 +16,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { NovuModule } from './modules/novu/novu.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { join } from 'path';
     SseModule,
     MongodbModule,
     RedisdbModule,
+    NovuModule,
   ],
   controllers: [],
   providers: [],

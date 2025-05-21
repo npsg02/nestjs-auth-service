@@ -90,7 +90,7 @@ export class UsersService implements OnModuleInit {
     // });
   }
 
-  async getUserRole(id: number) {
+  async getUserRole(id: string) {
     return this.prisma.user
       .findUnique({
         where: {
@@ -130,7 +130,7 @@ export class UsersService implements OnModuleInit {
     });
   }
 
-  async updateOrCreateRoles(userId: number, roles: string[]) {
+  async updateOrCreateRoles(userId: string, roles: string[]) {
     const user = await this.prisma.user.findUnique({
       where: {
         id: userId,
@@ -180,7 +180,7 @@ export class UsersService implements OnModuleInit {
   async findUser(id: string) {
     const user = await this.prisma.user.findUnique({
       where: {
-        id: parseInt(id),
+        id: id,
       },
       include: {
         UserRole: true,

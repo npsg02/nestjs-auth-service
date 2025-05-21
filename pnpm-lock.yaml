@@ -68,6 +68,9 @@ importers:
       '@nestjs/websockets':
         specifier: ^9.4.2
         version: 9.4.3(@nestjs/common@9.4.2(cache-manager@5.7.6)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.2))(@nestjs/core@9.4.2)(@nestjs/platform-socket.io@9.4.3)(reflect-metadata@0.1.13)(rxjs@7.8.2)
+      '@novu/api':
+        specifier: ^1.0.0
+        version: 1.0.0(zod@3.25.12)
       '@opentelemetry/auto-instrumentations-node':
         specifier: ^0.57.0
         version: 0.57.0(@opentelemetry/api@1.9.0)
@@ -1606,6 +1609,16 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
+
+  '@novu/api@1.0.0':
+    resolution: {integrity: sha512-ERPuMhUV9LevEHabSzM9mqg6QtMM7EWpH0/IJ+UGwNe2iO3daW6NOSF9qd6OcMZUltvSIuj3WcH1X1bUjCf47Q==}
+    hasBin: true
+    peerDependencies:
+      '@modelcontextprotocol/sdk': '>=1.5.0 <1.10.0'
+      zod: '>= 3'
+    peerDependenciesMeta:
+      '@modelcontextprotocol/sdk':
+        optional: true
 
   '@nuxtjs/opencollective@0.3.2':
     resolution: {integrity: sha512-um0xL3fO7Mf4fDxcqx9KryrB7zgRM5JSlvGN5AGkP6JLM5XEKyjeAiPbNxdXVXQ16isuAhYpvP88NgL2BGd6aA==}
@@ -6384,6 +6397,9 @@ packages:
     resolution: {integrity: sha512-9qv4rlDiopXg4E69k+vMHjNN63YFMe9sZMrdlvKnCjlCRWeCBswPPMPUfx+ipsAWq1LXHe70RcbaHdJJpS6hyQ==}
     engines: {node: '>= 10'}
 
+  zod@3.25.12:
+    resolution: {integrity: sha512-A8e9eiwm2L5YEupdjn1YcxL1ZDWuL3Bc4JKvLwUrpKZZtRUDOijR7XXsV5WMuUCZPc1tFYO5yfH14STI08MquA==}
+
 snapshots:
 
   '@acuminous/bitsyntax@0.1.2':
@@ -8088,6 +8104,10 @@ snapshots:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
+
+  '@novu/api@1.0.0(zod@3.25.12)':
+    dependencies:
+      zod: 3.25.12
 
   '@nuxtjs/opencollective@0.3.2':
     dependencies:
@@ -13615,3 +13635,5 @@ snapshots:
       archiver-utils: 3.0.4
       compress-commons: 4.1.2
       readable-stream: 3.6.2
+
+  zod@3.25.12: {}

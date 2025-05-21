@@ -6,8 +6,8 @@ import { Field, Int, ObjectType } from '@nestjs/graphql';
 class UserRole {
   @Field(() => Int)
   id: number;
-  @Field(() => Int)
-  userId: number;
+  @Field(() => String)
+  userId: string;
   @Field(() => String)
   roleName: string;
 

@@ -7,11 +7,11 @@ import { IsOptional, IsString } from 'class-validator';
 class User {
   @ApiProperty({
     required: false,
-    type: Number,
+    type: String,
   })
   @IsOptional()
-  @Field(() => Number)
-  id!: number;
+  @Field(() => String)
+  id!: string;
 
   @ApiProperty({
     required: true,

@@ -1,0 +1,10 @@
+{
+	"cst": {
+		"prefix": "cst",
+		"description": "cst",
+		"scope": "typescript",
+		"body": [
+			"constructor() {}"
+		]
+	}
+}

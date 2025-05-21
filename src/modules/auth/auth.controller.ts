@@ -1,7 +1,6 @@
 import { AuthService } from './auth.service';
 import { LoginRequestDto } from './dto/request/login-request.dto';
-import { LoginInput } from './dtos/inputs/LoginInput';
-import { SignupInput } from './dtos/inputs/SignupInput';
+import { SignupRequestDto } from './dto/request/signup-request.dto';
 import { Token } from './entities/Token';
 import { ReqUser } from '@/common/decorators/user.decorator';
 import { GoogleOauthGuard, JwtGuard } from '@/common/guards';
@@ -20,16 +19,11 @@ export class AuthController {
   })
   @Post('login')
   async login(@Body() loginInput: LoginRequestDto) {
-    const { accessToken, refreshToken } = await this.authService.login(loginInput);
-
-    return {
-      accessToken,
-      refreshToken,
-    };
+    return await this.authService.login(loginInput);
   }
 
   @Post('register')
-  async signup(@Body() data: SignupInput) {
+  async signup(@Body() data: SignupRequestDto) {
     const { accessToken, refreshToken } = await this.authService.createUser({
       ...data,
     });
