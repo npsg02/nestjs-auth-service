@@ -37,7 +37,6 @@ export class TransformInterceptor<T> implements NestInterceptor<T, ResponsePaylo
 
     return next.handle().pipe(
       map((data) => {
-        console.log('TransformInterceptor', data);
         if (data && data.hasOwnProperty('validation')) {
           //  return details of validation errors
           return {

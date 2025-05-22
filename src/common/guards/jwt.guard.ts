@@ -16,6 +16,7 @@ export class JwtGuard extends AuthGuard('jwt') {
       context.getClass(),
     ]);
     if (!roles) return true;
+    console.log('user JwtGuard', user);
     return roles.some((role) => user.role === role);
   }
 

@@ -207,13 +207,43 @@ export class AuthService {
   }
 
   async validateUser(userId: string): Promise<any> {
-    return await this.prisma.user.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id: userId },
       include: {
-        UserRole: true,
+        UserRole: {
+          include: {
+            Role: {
+              include: {
+                RolePermission: {
+                  include: {
+                    Permission: true,
+                  },
+                },
+              },
+            },
+          },
+        },
         Provider: true,
       },
     });
+
+    // extract roles
+    const roles = user.UserRole.map((role) => role.roleName);
+    const permissions = user.UserRole.flatMap((role) =>
+      role.Role.RolePermission.map((permission) => permission.Permission.name)
+    );
+    const permissionsSet = new Set(permissions);
+    const permissionsArray = Array.from(permissionsSet);
+    const userWithRoles = {
+      ...user,
+      roles,
+      permissions: permissionsArray,
+    };
+
+    delete userWithRoles.password;
+    delete userWithRoles.UserRole;
+
+    return userWithRoles;
   }
 
   generateTokens(payload: UserPayload): Token {

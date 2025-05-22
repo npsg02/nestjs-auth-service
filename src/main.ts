@@ -1,10 +1,11 @@
 import tracer from './shared/core/signoz/tracer';
+import { setupKafkaTranspoter } from './shared/microservice';
 import { setupPrisma } from './shared/prisma';
 import { AppModule } from '@/app.module';
 import type { NestConfig } from '@/common/configs/config.interface';
 import { HttpExceptionFilter } from '@/common/filters/HttpExceptions.filter';
-import { setupSocket } from '@/common/socket/socket';
-import { setupSwagger } from '@/common/swagger';
+import { setupSocket } from '@/shared/socket/socket';
+import { setupSwagger } from '@/shared/swagger';
 import { ConfigService } from '@nestjs/config';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { json, urlencoded } from 'express';
@@ -27,6 +28,7 @@ async function bootstrap() {
   await setupPrisma(app);
   await setupSwagger(app);
   await setupSocket(app);
+  // await setupKafkaTranspoter(app);
 
   // Listen port
   const configService = app.get(ConfigService);

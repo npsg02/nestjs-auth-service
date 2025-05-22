@@ -57,7 +57,26 @@ model UserRole {
 }
 
 model Role {
-  name        String     @id
-  description String?
-  UserRole    UserRole[]
+  name           String           @id
+  description    String?
+  UserRole       UserRole[]
+  RolePermission RolePermission[]
+}
+
+// Permission model for fine-grained access control (e.g., "read:user", "delete:post")
+model Permission {
+  name           String           @id
+  description    String?
+  RolePermission RolePermission[]
+}
+
+// Join table to assign permissions to roles (many-to-many)
+model RolePermission {
+  id             Int        @id @default(autoincrement())
+  roleName       String
+  permissionName String
+  Role           Role       @relation(fields: [roleName], references: [name])
+  Permission     Permission @relation(fields: [permissionName], references: [name])
+
+  @@unique([roleName, permissionName])
 }

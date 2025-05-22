@@ -5,8 +5,12 @@ import { OtpVerifyRequestDto } from './dto/request/otp-verify.dto';
 import { SignupRequestDto } from './dto/request/signup-request.dto';
 import { Token } from './entities/Token';
 import { OtpAuthService } from './services/otp-auth.service';
+import { Permissions } from '@/common/decorators/permissions.decorator';
+import { Roles } from '@/common/decorators/roles.decorator';
 import { ReqUser } from '@/common/decorators/user.decorator';
 import { GoogleOauthGuard, JwtGuard } from '@/common/guards';
+import { MicroServiceGuard } from '@/common/guards/micro-service.guard';
+import { RolesPermissionsGuard } from '@/common/guards/roles-permisions.guard';
 import { User } from '@/shared/prisma';
 import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -48,9 +52,20 @@ export class AuthController {
   }
 
   @ApiBearerAuth()
-  @UseGuards(JwtGuard)
+  @UseGuards(RolesPermissionsGuard)
+  @Roles('user', 'admin')
+  @Permissions('read:users')
   @Get('profile')
   async profile(@ReqUser() user: User) {
+    return user;
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(MicroServiceGuard)
+  @Roles('user', 'admin')
+  @Permissions('read:users')
+  @Get('profile-microservice')
+  async profileMicroservce(@ReqUser() user: User) {
     return user;
   }
 
