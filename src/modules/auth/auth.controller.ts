@@ -1,7 +1,10 @@
 import { AuthService } from './auth.service';
 import { LoginRequestDto } from './dto/request/login-request.dto';
+import { OtpAuthRequestDto } from './dto/request/otp-auth.dto';
+import { OtpVerifyRequestDto } from './dto/request/otp-verify.dto';
 import { SignupRequestDto } from './dto/request/signup-request.dto';
 import { Token } from './entities/Token';
+import { OtpAuthService } from './services/otp-auth.service';
 import { ReqUser } from '@/common/decorators/user.decorator';
 import { GoogleOauthGuard, JwtGuard } from '@/common/guards';
 import { User } from '@/shared/prisma';
@@ -12,7 +15,10 @@ import { Response } from 'express';
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly otpAuthService: OtpAuthService
+  ) {}
 
   @ApiResponse({
     type: [Token],
@@ -62,5 +68,15 @@ export class AuthController {
     const token = await this.authService.googleAuth(req.user);
     // TODO: add to env
     return res.redirect(`${process.env.FRONTEND_URL}/auth/login?accessToken=${token.accessToken}`);
+  }
+
+  @Post('request-otp')
+  async requestOtp(@Body() body: OtpAuthRequestDto) {
+    return await this.otpAuthService.generateOtp(body.username);
+  }
+
+  @Post('login-otp')
+  async loginOtp(@Body() body: OtpVerifyRequestDto) {
+    return await this.otpAuthService.verifyOtp(body.username, body.otp);
   }
 }

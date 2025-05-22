@@ -1,11 +1,11 @@
 import { AuthService } from './auth.service';
 import { LoginRequestDto } from './dto/request/login-request.dto';
-import { SignupRequestDto } from './dto/request/signup-request.dto';
 import {
   ChangePasswordInput,
   ForgotPasswordInput,
   ResetPasswordInput,
-} from './dtos/inputs/reset-password.input';
+} from './dto/request/reset-password.input';
+import { SignupRequestDto } from './dto/request/signup-request.dto';
 import { Token } from './entities/Token';
 import { UserEntity } from '@/common/decorators';
 import { GqlAuthGuard } from '@/common/guards';

@@ -5,7 +5,7 @@ import { RedisModule } from '../../shared/core/transporter/redis/redis.module';
 import { UsersController } from './users.controller';
 import { UserResolver } from './users.resolver';
 import { UsersService } from './users.service';
-import { PasswordService } from '@/modules/auth/password.service';
+import { PasswordService } from '@/modules/auth/services/password.service';
 import { KafkaModule } from '@/shared/core/transporter/kafka/kafka.module';
 import { Module } from '@nestjs/common';
 import { Kafka } from 'kafkajs';

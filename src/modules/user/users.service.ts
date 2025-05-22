@@ -1,7 +1,7 @@
 import { NatsService } from '../../shared/core/transporter/nats/nat.service';
 import { RabbitMqService } from '../../shared/core/transporter/rabbitmq/rabbitmq.service';
 import { RedisService } from '../../shared/core/transporter/redis/redis.service';
-import { PasswordService } from '@/modules/auth/password.service';
+import { PasswordService } from '@/modules/auth/services/password.service';
 import { KafkaService } from '@/shared/core/transporter/kafka/kafka.service';
 import { Prisma, PrismaService } from '@/shared/prisma';
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';

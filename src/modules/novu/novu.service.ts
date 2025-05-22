@@ -1,5 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { Novu } from '@novu/api';
+import { use } from 'passport';
 
 @Injectable()
 export class NovuService implements OnModuleInit {
@@ -21,6 +22,20 @@ export class NovuService implements OnModuleInit {
       workflowId: 'system',
       payload: {},
     });
+  }
+
+  async sendOtpEmail(user, otp: string) {
+    const notification = await this.novu.trigger({
+      workflowId: 'otp',
+      to: {
+        email: user.email,
+        subscriberId: user.id,
+      },
+      payload: {
+        otp,
+      },
+    });
+    return notification;
   }
 
   async createSubscriber(user: any) {

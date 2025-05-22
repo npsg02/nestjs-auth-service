@@ -1,8 +1,8 @@
 import { NovuService } from '../novu/novu.service';
 import { LoginRequestDto } from './dto/request/login-request.dto';
-import { ChangePasswordInput } from './dtos/inputs/reset-password.input';
+import { ChangePasswordInput } from './dto/request/reset-password.input';
 import { Token } from './entities/Token';
-import { PasswordService } from './password.service';
+import { PasswordService } from './services/password.service';
 import { SecurityConfig } from '@/common/configs/config.interface';
 import { User } from '@/modules/user/entities/User';
 import { UsersService } from '@/modules/user/users.service';
@@ -156,7 +156,7 @@ export class AuthService {
     return user;
   }
 
-  async login(loginInput: LoginRequestDto): Promise<any> {
+  async login(loginInput: LoginRequestDto, passwordLess?: boolean): Promise<any> {
     const { email, password } = loginInput;
 
     const user = await this.prisma.user.findUnique({
@@ -178,12 +178,14 @@ export class AuthService {
       throw new NotFoundException(`Email or password is incorrect`);
     }
     // map role to string
+    if (!passwordLess) {
+      const passwordValid = await this.passwordService.validatePassword(password, user.password);
 
-    const passwordValid = await this.passwordService.validatePassword(password, user.password);
-
-    if (!passwordValid) {
-      throw new BadRequestException('Invalid password');
+      if (!passwordValid) {
+        throw new BadRequestException('Invalid password');
+      }
     }
+
     const userRole: string[] = user.UserRole.map((role) => role.roleName);
     const payload: UserPayload = {
       userId: user.id,
