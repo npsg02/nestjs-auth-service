@@ -1,11 +1,17 @@
 import { CreatePortfolioDto, UpdatePortfolioDto } from './portfolio.dto';
 import { Portfolio } from '@/shared/database/mongodb/models/portfolio.model';
+import { PortfolioDetailRepository } from '@/shared/database/mongodb/repositories/portfolio-detail.repository';
+import { PortfolioHistoryRepository } from '@/shared/database/mongodb/repositories/portfolio-history.repository';
 import { PortfolioRepository } from '@/shared/database/mongodb/repositories/portfolio.repository';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class PortfolioService {
-  constructor(private readonly portfolioRepository: PortfolioRepository) {}
+  constructor(
+    private readonly portfolioRepository: PortfolioRepository,
+    private readonly protfolioDetailRepository: PortfolioDetailRepository,
+    private readonly portfolioHistoryRepository: PortfolioHistoryRepository
+  ) {}
 
   async create(createPortfolioDto: CreatePortfolioDto): Promise<Portfolio> {
     return this.portfolioRepository.create(createPortfolioDto as any);
