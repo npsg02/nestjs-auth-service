@@ -3,6 +3,7 @@ import { ROLES_KEY } from '../decorators/roles.decorator';
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
+import { isEmpty } from 'lodash';
 import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
@@ -45,8 +46,8 @@ export class RolesPermissionsGuard extends AuthGuard('jwt') implements CanActiva
     }
 
     // Check user roles/permissions
-    const { user } = context.switchToHttp().getRequest();
-    console.log('user', user);
+    const req = context.switchToHttp().getRequest();
+    const user = req.user;
     if (!user) {
       return false;
     }
@@ -55,6 +56,21 @@ export class RolesPermissionsGuard extends AuthGuard('jwt') implements CanActiva
     const hasPermission = requiredPermissions
       ? requiredPermissions.some((perm) => user.permissions?.includes(perm))
       : true;
+
+    if (req.body && user && !isEmpty(user)) {
+      req.body.user = user;
+      req.body.userId = user?.id;
+    }
+
+    if (req.params && user && !isEmpty(user)) {
+      req.params.user = user;
+      req.params.userId = user?.id;
+    }
+    
+    if (req.query && user && !isEmpty(user)) {
+      req.query.user = user;
+      req.query.userId = user?.id;
+    }
 
     return hasRole && hasPermission;
   }

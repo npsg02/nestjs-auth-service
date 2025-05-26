@@ -1,3 +1,4 @@
+import { OTLPLogger } from './shared/core/signoz/logger.service';
 import tracer from './shared/core/signoz/tracer';
 import { setupKafkaTranspoter } from './shared/microservice';
 import { setupPrisma } from './shared/prisma';
@@ -14,6 +15,7 @@ async function bootstrap() {
   tracer.start();
   const app = await NestFactory.create(AppModule, {
     cors: true,
+    bufferLogs: true,
   });
 
   app.setGlobalPrefix('/api');
@@ -29,6 +31,12 @@ async function bootstrap() {
   await setupSwagger(app);
   await setupSocket(app);
   // await setupKafkaTranspoter(app);
+
+  // Get the OTLP logger instance
+  const otlpLogger = app.get(OTLPLogger);
+
+  // Set the custom logger
+  app.useLogger(otlpLogger);
 
   // Listen port
   const configService = app.get(ConfigService);

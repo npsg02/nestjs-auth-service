@@ -1,11 +1,8 @@
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
-import { Resource, resourceFromAttributes } from '@opentelemetry/resources';
+import { resourceFromAttributes } from '@opentelemetry/resources';
 import { NodeSDK } from '@opentelemetry/sdk-node';
-import {
-  SemanticResourceAttributes,
-  SEMRESATTRS_SERVICE_NAME,
-} from '@opentelemetry/semantic-conventions';
+import { PrismaInstrumentation } from '@prisma/instrumentation';
 
 // // Enable logging for debugging
 // import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api';
@@ -15,29 +12,25 @@ import {
 // Configure the SDK to export telemetry data to the console
 // Enable all auto-instrumentations from the meta package
 const exporterOptions = {
-  url: 'https://http.signoz.vdaily.app/v1/traces',
+  url: 'http://localhost:4318/v1/traces',
 };
 
 const traceExporter = new OTLPTraceExporter(exporterOptions);
 const sdk = new NodeSDK({
-  traceExporter,
-  instrumentations: [getNodeAutoInstrumentations()],
+  traceExporter: traceExporter,
+  instrumentations: [
+    getNodeAutoInstrumentations(),
+    new PrismaInstrumentation({
+      middleware: true, // Enable middleware tracing if needed
+    }),
+  ],
   resource: resourceFromAttributes({
-    [SemanticResourceAttributes.SERVICE_NAME]: 'sample-nestjs-app-1',
+    'service.name': 'auth-service',
   }),
 });
 
 // initialize the SDK and register with the OpenTelemetry API
 // this enables the API to record telemetry
 sdk.start();
-
-// // gracefully shut down the SDK on process exit
-// process.on('SIGTERM', () => {
-//   sdk
-//     .shutdown()
-//     .then(() => console.log('Tracing terminated'))
-//     .catch((error) => console.log('Error terminating tracing', error))
-//     .finally(() => process.exit(0));
-// });
 
 export default sdk;

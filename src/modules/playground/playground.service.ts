@@ -4,7 +4,5 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class PlaygroundService {
-  constructor(private readonly opendalService: OpendalService){}
-
-  
+  constructor(private readonly opendalService: OpendalService) {}
 }
