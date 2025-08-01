@@ -15,8 +15,7 @@ export class UsersService implements OnModuleInit {
 
     private readonly rabbitMqService: RabbitMqService,
     private readonly redisService: RedisService,
-    private readonly natsService: NatsService,
-    private readonly kafkaService: KafkaService
+    private readonly natsService: NatsService
   ) {}
 
   onModuleInit() {

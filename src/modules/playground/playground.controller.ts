@@ -87,6 +87,11 @@ export class PlaygroundController {
     });
   }
 
+  @Get('test-cache')
+  async testCache() {
+    return await this.playgroundService.getCachedData();
+  }
+
   @ApiOperation({ summary: 'Get operation description' })
   @ApiResponse({ status: 200, description: 'Success response description' })
   @Get('user-name')
