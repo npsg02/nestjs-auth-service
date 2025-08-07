@@ -8,6 +8,7 @@ import { SignozModule } from './shared/core/signoz/signoz.module';
 import { RabbitMqModule } from './shared/core/transporter/rabbitmq/rabbitmq.module';
 import { MongodbModule } from './shared/database/mongodb/mongodb.module';
 import { RedisdbModule } from './shared/database/redisdb/redisdb.module';
+import { ScylladbModule } from './shared/database/scylladb/scylladb.module';
 import { GraphQLModule } from './shared/graphql';
 import { PrismaModule } from './shared/prisma';
 import config from '@/common/configs/config';
@@ -35,6 +36,7 @@ import { join } from 'path';
     SseModule,
     MongodbModule,
     RedisdbModule,
+    ScylladbModule,
     NovuModule,
     SignozModule,
     PortfolioModule,
