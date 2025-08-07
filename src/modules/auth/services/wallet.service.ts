@@ -329,7 +329,7 @@ export class WalletService {
    * Generate a nonce for wallet authentication
    */
   generateNonce(): string {
-    return ethers.utils.hexlify(ethers.utils.randomBytes(16));
+    return ethers.randomBytes(16);
   }
 
   /**
@@ -345,7 +345,7 @@ export class WalletService {
    */
   private async verifySignature(address: string, message: string, signature: string): Promise<boolean> {
     try {
-      const recoveredAddress = ethers.utils.verifyMessage(message, signature);
+      const recoveredAddress = ethers.verifyMessage(message, signature);
       return recoveredAddress.toLowerCase() === address.toLowerCase();
     } catch (error) {
       console.error('Signature verification error:', error);

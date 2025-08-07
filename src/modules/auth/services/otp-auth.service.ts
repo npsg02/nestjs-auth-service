@@ -14,7 +14,7 @@ export class OtpService {
 
   constructor(
     private readonly novuService: NovuService,
-    private readonly prisma: PrismaService,
+    private readonly prismaService: PrismaService,
     private readonly authService: AuthService,
     private readonly redisdbService: RedisdbService
   ) {}
@@ -24,7 +24,7 @@ export class OtpService {
     await this.cleanupExpiredTokens(identifier, type);
 
     // Check if there's an active token
-    const existingToken = await this.prisma.otpToken.findUnique({
+    const existingToken = await this.prismaService.otpToken.findUnique({
       where: {
         identifier_type: {
           identifier,
@@ -42,7 +42,7 @@ export class OtpService {
     const expiresAt = new Date(Date.now() + this.otpTimeout * 1000);
 
     // Save OTP to database
-    await this.prisma.otpToken.upsert({
+    await this.prismaService.otpToken.upsert({
       where: {
         identifier_type: {
           identifier,
@@ -76,7 +76,7 @@ export class OtpService {
   }
 
   async verifyOtp(identifier: string, otp: string, type: OtpType = 'LOGIN'): Promise<boolean> {
-    const otpToken = await this.prisma.otpToken.findUnique({
+    const otpToken = await this.prismaService.otpToken.findUnique({
       where: {
         identifier_type: {
           identifier,
@@ -91,7 +91,7 @@ export class OtpService {
 
     // Check if OTP is expired
     if (this.isTokenExpired(otpToken.expiresAt)) {
-      await this.prisma.otpToken.delete({
+      await this.prismaService.otpToken.delete({
         where: { id: otpToken.id }
       });
       return false;
@@ -104,7 +104,7 @@ export class OtpService {
 
     // Check max attempts
     if (otpToken.attempts >= otpToken.maxAttempts) {
-      await this.prisma.otpToken.delete({
+      await this.prismaService.otpToken.delete({
         where: { id: otpToken.id }
       });
       return false;
@@ -113,7 +113,7 @@ export class OtpService {
     // Verify OTP
     if (otpToken.token !== otp) {
       // Increment attempts
-      await this.prisma.otpToken.update({
+      await this.prismaService.otpToken.update({
         where: { id: otpToken.id },
         data: { attempts: otpToken.attempts + 1 }
       });
@@ -121,7 +121,7 @@ export class OtpService {
     }
 
     // Mark as used
-    await this.prisma.otpToken.update({
+    await this.prismaService.otpToken.update({
       where: { id: otpToken.id },
       data: { isUsed: true }
     });
@@ -175,7 +175,7 @@ export class OtpService {
   }
 
   private async cleanupExpiredTokens(identifier: string, type: OtpType): Promise<void> {
-    await this.prisma.otpToken.deleteMany({
+    await this.prismaService.otpToken.deleteMany({
       where: {
         identifier,
         type,
@@ -190,7 +190,7 @@ export class OtpService {
     const isEmail = this.isEmail(identifier);
     
     if (userId) {
-      const user = await this.prisma.user.findUnique({
+      const user = await this.prismaService.user.findUnique({
         where: { id: userId }
       });
       
@@ -220,7 +220,7 @@ export class OtpService {
 // Keep backward compatibility
 export class OtpAuthService extends OtpService {
   async generateOtp(identifier: string) {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prismaService.user.findUnique({
       where: { email: identifier },
     });
     if (!user) {

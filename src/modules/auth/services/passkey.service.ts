@@ -12,9 +12,11 @@ import type {
   GenerateAuthenticationOptionsOpts,
   VerifyRegistrationResponseOpts,
   VerifyAuthenticationResponseOpts,
+} from '@simplewebauthn/server';
+import type {
   RegistrationResponseJSON,
   AuthenticationResponseJSON,
-} from '@simplewebauthn/server';
+} from '@simplewebauthn/types';
 
 export interface PasskeyRegistrationDto {
   userId: string;
@@ -136,7 +138,10 @@ export class PasskeyService {
       throw new BadRequestException('Passkey registration failed');
     }
 
-    const { credentialID, credentialPublicKey, counter } = verification.registrationInfo;
+    const { credential } = verification.registrationInfo;
+    const credentialID = credential.id;
+    const credentialPublicKey = credential.publicKey;
+    const counter = credential.counter;
 
     // Save the credential
     const credential = await this.prisma.passkeyCredential.create({
@@ -263,9 +268,9 @@ export class PasskeyService {
       expectedChallenge,
       expectedOrigin: this.origin,
       expectedRPID: this.rpId,
-      authenticator: {
-        credentialID: Buffer.from(credential.credentialId, 'base64'),
-        credentialPublicKey: Buffer.from(credential.publicKey, 'base64'),
+      credential: {
+        id: Buffer.from(credential.credentialId, 'base64'),
+        publicKey: Buffer.from(credential.publicKey, 'base64'),
         counter: Number(credential.counter),
       },
     });

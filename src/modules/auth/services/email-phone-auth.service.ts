@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/shared/prisma';
 import { PasswordService } from './password.service';
-import { OtpService } from './otp.service';
+import { OtpService } from './otp-auth.service';
 import { SessionService } from './session.service';
 
 export interface EmailPhoneLoginDto {
