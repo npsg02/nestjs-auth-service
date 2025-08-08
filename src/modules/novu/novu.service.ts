@@ -52,8 +52,14 @@ export class NovuService implements OnModuleInit {
   }
 
   async updateSubscriber(user: any) {
-    const subscriber = await this.novu.subscribers.upsert(user?.id, user);
-
-    return subscriber;
+    try {
+      const subscriber = await this.novu.subscribers.update(user?.id, user);
+      return subscriber;
+    } catch (error) {
+      // Fallback to create if update fails
+      console.log('Update failed, creating subscriber:', error.message);
+      const subscriber = await this.createSubscriber(user);
+      return subscriber;
+    }
   }
 }

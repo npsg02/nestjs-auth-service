@@ -31,20 +31,30 @@ model AuthProviderUser {
 
 model User {
   id           String             @id @default(dbgenerated("gen_random_uuid()"))
-  email        String             @unique
-  password     String
+  email        String?            @unique
+  password     String?
   fullName     String?
   address      String?
   avatarFileId Int?
   dateOfBirth  DateTime?
-  phone        String?
+  phone        String?            @unique
   bio          String?
   gender       Boolean?
   picture      String?
+  isEmailVerified Boolean         @default(false)
+  isPhoneVerified Boolean         @default(false)
+  twoFactorEnabled Boolean        @default(false)
+  
+  // Relations
   Provider     AuthProviderUser[]
   UserRole     UserRole[]
+  Sessions     Session[]
+  WalletAccounts WalletAccount[]
+  PasskeyCredentials PasskeyCredential[]
+  OtpTokens    OtpToken[]
 
   createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model UserRole {
@@ -80,4 +90,97 @@ model RolePermission {
   Permission     Permission @relation(fields: [permissionName], references: [name])
 
   @@unique([roleName, permissionName])
+}
+
+// Session management for comprehensive auth tracking
+model Session {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
+  userId    String
+  token     String   @unique
+  type      SessionType @default(ACCESS)
+  deviceInfo String?
+  ipAddress String?
+  userAgent String?
+  isActive  Boolean  @default(true)
+  expiresAt DateTime
+  
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum SessionType {
+  ACCESS
+  REFRESH
+  OTP
+  RESET_PASSWORD
+}
+
+// OTP tokens for various authentication scenarios
+model OtpToken {
+  id        String    @id @default(dbgenerated("gen_random_uuid()"))
+  userId    String?
+  identifier String   // email or phone
+  token     String
+  type      OtpType
+  attempts  Int       @default(0)
+  maxAttempts Int     @default(3)
+  isUsed    Boolean   @default(false)
+  expiresAt DateTime
+  
+  User      User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime  @default(now())
+  
+  @@unique([identifier, type])
+}
+
+enum OtpType {
+  LOGIN
+  REGISTER
+  PHONE_VERIFICATION
+  EMAIL_VERIFICATION
+  PASSWORD_RESET
+  TWO_FACTOR
+}
+
+// Wallet accounts for blockchain authentication
+model WalletAccount {
+  id        String      @id @default(dbgenerated("gen_random_uuid()"))
+  userId    String
+  address   String      @unique
+  type      WalletType
+  isVerified Boolean    @default(false)
+  isPrimary Boolean     @default(false)
+  metadata  Json?       // Additional wallet metadata
+  
+  User      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+enum WalletType {
+  ETHEREUM
+  BITCOIN
+  POLYGON
+  BSC
+}
+
+// Passkey credentials for WebAuthn
+model PasskeyCredential {
+  id            String  @id @default(dbgenerated("gen_random_uuid()"))
+  userId        String
+  credentialId  String  @unique
+  publicKey     String
+  counter       BigInt  @default(0)
+  deviceType    String?
+  backed        Boolean @default(false)
+  transports    Json?   // Array of transports
+  
+  User          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt     DateTime @default(now())
+  lastUsedAt    DateTime @default(now())
 }

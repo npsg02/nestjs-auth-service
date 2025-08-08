@@ -2,10 +2,16 @@ import { NovuModule } from '../novu/novu.module';
 import { NovuService } from '../novu/novu.service';
 import { UsersModule } from '../user/users.module';
 import { AuthController } from './auth.controller';
+import { EnhancedAuthController } from './enhanced-auth.controller';
 import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
-import { OtpAuthService } from './services/otp-auth.service';
+import { OtpAuthService, OtpService } from './services/otp-auth.service';
 import { PasswordService } from './services/password.service';
+import { EmailPhoneAuthService } from './services/email-phone-auth.service';
+import { SessionService } from './services/session.service';
+import { WalletService } from './services/wallet.service';
+import { PasskeyService } from './services/passkey.service';
+import { OAuthService } from './services/oauth.service';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { SecurityConfig } from '@/common/configs/config.interface';
@@ -48,8 +54,23 @@ import { PassportModule } from '@nestjs/passport';
     AuthResolver,
     GqlAuthGuard,
     OtpAuthService,
+    OtpService,
+    EmailPhoneAuthService,
+    SessionService,
+    WalletService,
+    PasskeyService,
+    OAuthService,
   ],
-  exports: [AuthService, WsGuard],
-  controllers: [AuthController],
+  exports: [
+    AuthService, 
+    WsGuard, 
+    SessionService, 
+    EmailPhoneAuthService, 
+    WalletService, 
+    PasskeyService, 
+    OAuthService,
+    OtpService
+  ],
+  controllers: [AuthController, EnhancedAuthController],
 })
 export class AuthModule {}
